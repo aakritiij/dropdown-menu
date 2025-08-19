@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product Entry & Filter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    input, select, button {
+      margin: 5px;
+      padding: 5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .form-box {
+      border: 1px solid black;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Product Entry Form</h2>
+  <div class="form-box">
+    <label>ID: <input type="text" id="productId"></label><br>
+    <label>Name: <input type="text" id="productName"></label><br>
+    <label>Price: <input type="number" id="productPrice"></label><br>
+    <label>Category:
+      <select id="productCategory">
+        <option value="Clothing">Clothing</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Books">Books</option>
+      </select>
+    </label><br>
+    <button onclick="addProduct()">Add Product</button>
+  </div>
+
+  <label>Filter by Category:
+    <select id="categoryFilter" onchange="filterProducts()">
+      <option value="All">All</option>
+      <option value="Clothing">Clothing</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Books">Books</option>
+    </select>
+  </label>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Category</th>
+      </tr>
+    </thead>
+    <tbody id="productTableBody"></tbody>
+  </table>
+
+  <script>
+    let products = [];
+
+    function addProduct() {
+      const id = document.getElementById("productId").value.trim();
+      const name = document.getElementById("productName").value.trim();
+      const price = document.getElementById("productPrice").value.trim();
+      const category = document.getElementById("productCategory").value;
+
+      if (id && name && price && category) {
+        const newProduct = { id, name, price, category };
+        products.push(newProduct);
+
+        document.getElementById("productId").value = "";
+        document.getElementById("productName").value = "";
+        document.getElementById("productPrice").value = "";
+
+        displayProducts();
+      } else {
+        alert("Please fill in all fields.");
+      }
+    }
+
+    function displayProducts() {
+      const filter = document.getElementById("categoryFilter").value;
+      const tableBody = document.getElementById("productTableBody");
+      tableBody.innerHTML = "";
+
+      for (let i = 0; i < products.length; i++) {
+        const product = products[i];
+        if (filter === "All" || product.category === filter) {
+          const row = "<tr><td>" + product.id + "</td><td>" +
+                      product.name + "</td><td>" +
+                      product.price + "</td><td>" +
+                      product.category + "</td></tr>";
+          tableBody.innerHTML += row;
+        }
+      }
+    }
+
+    function filterProducts() {
+      displayProducts();
+    }
+  </script>
+
+</body>
+</html>
