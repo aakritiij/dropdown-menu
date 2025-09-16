@@ -1,122 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Product Entry & Filter</title>
+  <meta charset="UTF-8">
+  <title>Dynamic Product Filter with Dropdown using JavaScript DOM Manipulation</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
     }
-
-    input, select, button {
-      margin: 5px;
-      padding: 5px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-    }
-
-    th {
-      background-color: #f2f2f2;
-    }
-
-    .form-box {
-      border: 1px solid black;
-      padding: 15px;
+    .container {
+      border: 2px solid black;
+      padding: 10px;
+      width: 500px;
       margin-bottom: 20px;
+    }
+    select {
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+    .product {
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
     }
   </style>
 </head>
 <body>
-
-  <h2>Product Entry Form</h2>
-  <div class="form-box">
-    <label>ID: <input type="text" id="productId"></label><br>
-    <label>Name: <input type="text" id="productName"></label><br>
-    <label>Price: <input type="number" id="productPrice"></label><br>
-    <label>Category:
-      <select id="productCategory">
-        <option value="Clothing">Clothing</option>
-        <option value="Electronics">Electronics</option>
-        <option value="Books">Books</option>
-      </select>
-    </label><br>
-    <button onclick="addProduct()">Add Product</button>
+  <div class="container">
+    <h3><b>Product List</b></h3>
+    <label for="category">Filter by Category: </label>
+    <select id="category">
+      <option value="all">All</option>
+      <option value="clothing">Clothing</option>
+      <option value="electronics">Electronics</option>
+      <option value="books">Books</option>
+    </select>
+    <div id="productList">
+      <div class="product" data-category="clothing">T-Shirt</div>
+      <div class="product" data-category="clothing">Jeans</div>
+      <div class="product" data-category="electronics">Headphones</div>
+      <div class="product" data-category="electronics">Smartphone</div>
+      <div class="product" data-category="books">Novel</div>
+      <div class="product" data-category="books">Cookbook</div>
+    </div>
   </div>
 
-  <label>Filter by Category:
-    <select id="categoryFilter" onchange="filterProducts()">
-      <option value="All">All</option>
-      <option value="Clothing">Clothing</option>
-      <option value="Electronics">Electronics</option>
-      <option value="Books">Books</option>
-    </select>
-  </label>
-
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Category</th>
-      </tr>
-    </thead>
-    <tbody id="productTableBody"></tbody>
-  </table>
-
   <script>
-    let products = [];
+    const categoryDropdown = document.getElementById("category");
+    const products = document.querySelectorAll(".product");
 
-    function addProduct() {
-      const id = document.getElementById("productId").value.trim();
-      const name = document.getElementById("productName").value.trim();
-      const price = document.getElementById("productPrice").value.trim();
-      const category = document.getElementById("productCategory").value;
+    categoryDropdown.addEventListener("change", () => {
+      const selectedCategory = categoryDropdown.value;
 
-      if (id && name && price && category) {
-        const newProduct = { id, name, price, category };
-        products.push(newProduct);
-
-        document.getElementById("productId").value = "";
-        document.getElementById("productName").value = "";
-        document.getElementById("productPrice").value = "";
-
-        displayProducts();
-      } else {
-        alert("Please fill in all fields.");
-      }
-    }
-
-    function displayProducts() {
-      const filter = document.getElementById("categoryFilter").value;
-      const tableBody = document.getElementById("productTableBody");
-      tableBody.innerHTML = "";
-
-      for (let i = 0; i < products.length; i++) {
-        const product = products[i];
-        if (filter === "All" || product.category === filter) {
-          const row = "<tr><td>" + product.id + "</td><td>" +
-                      product.name + "</td><td>" +
-                      product.price + "</td><td>" +
-                      product.category + "</td></tr>";
-          tableBody.innerHTML += row;
+      products.forEach(product => {
+        if (selectedCategory === "all" || product.dataset.category === selectedCategory) {
+          product.style.display = "block";
+        } else {
+          product.style.display = "none";
         }
-      }
-    }
-
-    function filterProducts() {
-      displayProducts();
-    }
+      });
+    });
   </script>
-
 </body>
 </html>
